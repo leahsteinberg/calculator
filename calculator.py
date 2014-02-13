@@ -38,7 +38,7 @@ def parse(string):
 	tree = make_tree(tree, ['+', '-'])
 	return calc(tree)
 
-def number_touch(string):
+def number_touch(calc_input):
 	# input: something like (3)4, output: something like (3)*4 
 	# if a number is right next to a parentheses, insert a multiplication symbol in between
 	"""
@@ -46,17 +46,18 @@ def number_touch(string):
 	'(2)*3'
 	>>> number_touch('2+3(2+3)')
 	'2+3*(2+3)'
+	>>> number_touch('2(3)4')
+	'2*(3)*4'
 	"""
 
-
-	numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 	touch_list = []
-	for i in range(1, len(string)-1):
-		if string[i] == '(':
-			if string[i-1] in numbers:
+	for i in range(1, len(calc_input)-1):
+		char = calc_input[i]
+		if char == '(':
+			if calc_input[i-1].isdigit():
 				touch_list.append(i)
-		if string[i] == ')':
-			if string[i+1] in numbers:
+		if char == ')':
+			if calc_input[i+1].isdigit():
 				touch_list.append(i+1)
 	# what does i represent in either case? the index where it will be?? issue here.. aft
 
@@ -64,11 +65,12 @@ def number_touch(string):
 	#touch list needs ot be in assending order,(they will be)
 	#and after i put on in touch list, I need to add 1 ot all the other ones in touch list and 
 	#pop that one from touch list
-	for j in touch_list:
-		string = string[:j] + '*' + string[j:]
-		map(lambda x: x+1, touch_list)
+	for i in range(len(touch_list)):
+		index = touch_list[i]
+		calc_input = calc_input[:index] + '*' + calc_input[index:]
+		touch_list = map(lambda x: x+1, touch_list)
 
-	return string
+	return calc_input
 
 
 def split_ops(string, category):
@@ -200,15 +202,14 @@ def parens(string):
 		#there's no parentheses in this
 		return string
 
+if __name__ == "__main__":
+	import doctest
+	doctest.testmod()
 
-
-import doctest
-doctest.testmod()
-
-while(True):
-	string = raw_input('Calculator: ')
-	if len(string) >  0:
-		print parse(string)
+	while(True):
+		string = raw_input('Calculator: ')
+		if len(string) >  0:
+			print parse(string)
 
 
 
