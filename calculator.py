@@ -46,17 +46,18 @@ def number_touch(calc_input):
 	'(2)*3'
 	>>> number_touch('2+3(2+3)')
 	'2+3*(2+3)'
+	>>> number_touch('2(3)4')
+	'2*(3)*4'
 	"""
 
-
-	numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 	touch_list = []
 	for i in range(1, len(calc_input)-1):
-		if calc_input[i] == '(':
-			if calc_input[i-1] in numbers:
+		char = calc_input[i]
+		if char == '(':
+			if calc_input[i-1].isdigit():
 				touch_list.append(i)
-		if calc_input[i] == ')':
-			if calc_input[i+1] in numbers:
+		if char == ')':
+			if calc_input[i+1].isdigit():
 				touch_list.append(i+1)
 	# what does i represent in either case? the index where it will be?? issue here.. aft
 
@@ -64,9 +65,10 @@ def number_touch(calc_input):
 	#touch list needs ot be in assending order,(they will be)
 	#and after i put on in touch list, I need to add 1 ot all the other ones in touch list and 
 	#pop that one from touch list
-	for j in touch_list:
-		calc_input = calc_input[:j] + '*' + calc_input[j:]
-		map(lambda x: x+1, touch_list)
+	for i in range(len(touch_list)):
+		index = touch_list[i]
+		calc_input = calc_input[:index] + '*' + calc_input[index:]
+		touch_list = map(lambda x: x+1, touch_list)
 
 	return calc_input
 
