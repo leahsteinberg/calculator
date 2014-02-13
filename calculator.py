@@ -198,15 +198,14 @@ def parens(string):
 		#there's no parentheses in this
 		return string
 
+if __name__ == "__main__":
+	import doctest
+	doctest.testmod()
 
-
-import doctest
-doctest.testmod()
-
-while(True):
-	string = raw_input('Calculator: ')
-	if len(string) >  0:
-		print parse(string)
+	while(True):
+		string = raw_input('Calculator: ')
+		if len(string) >  0:
+			print parse(string)
 
 
 
